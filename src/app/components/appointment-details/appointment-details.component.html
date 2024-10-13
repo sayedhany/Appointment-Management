@@ -1,1 +1,21 @@
-<p>appointment-details works!</p>
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">Appointment Details</h3>
+    </div>
+    <div class="card-body">
+      <p><strong>Client Name:</strong> {{ appointment.clientName }}</p>
+      <p><strong>Date & Time:</strong> {{ appointment.date }}</p>
+      <p><strong>Type:</strong> {{ appointment.type }}</p>
+      <p><strong>Status:</strong> {{ appointment.status }}</p>
+    </div>
+    <div class="card-footer">
+      <a [routerLink]="['/appointments']" class="btn btn-primary me-3">Back to Appointments</a>
+      <button (click)="confirm1($event)" pButton type="button" label="Cancel" class="p-button-danger"></button>
+    
+    </div>
+    
+  </div>
+</div>
+<p-toast />
+<p-confirmDialog />

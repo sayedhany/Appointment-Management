@@ -1,0 +1,105 @@
+.container {
+  padding: 1rem;
+  background-color: var(--bg-color);
+  color: var(--font-color);
+
+  // Dark mode styling handled by theme switch
+  &.dark-mode {
+    background-color: var(--bg-color);
+    color: var(--font-color);
+  }
+}
+
+// Row and column spacing
+.row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.col-md-4 {
+  margin-bottom: 1.5rem;
+}
+
+// Card styling
+.card {
+  border-radius: 10px;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: var(--bg-color);
+  color: var(--font-color);
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  }
+
+  .card-body {
+    padding: 1.25rem;
+  }
+
+  .card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: var(--heading-color);
+  }
+
+  .card-text {
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+    color: var(--font-color);
+  }
+
+  .card-footer {
+    background-color: var(--secondary-color);
+    padding: 0.75rem;
+    border-top: none;
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+// Button styles
+button {
+  &.p-button-danger {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+
+    &:hover {
+      background-color: rgb(
+        var(--primary-color) - 20,
+        var(--primary-color) - 20,
+        var(--primary-color) - 20
+      );
+      border-color: rgb(
+        var(--primary-color) - 20,
+        var(--primary-color) - 20,
+        var(--primary-color) - 20
+      );
+    }
+  }
+}
+
+// Dialog styling for cancellation
+p-dialog {
+  .ui-dialog {
+    border-radius: 8px;
+    background-color: var(--bg-color);
+    color: var(--font-color);
+
+    .ui-dialog-titlebar {
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: 8px 8px 0 0;
+    }
+
+    .ui-dialog-footer {
+      display: flex;
+      justify-content: flex-end;
+
+      button {
+        margin-left: 0.5rem;
+      }
+    }
+  }
+}
