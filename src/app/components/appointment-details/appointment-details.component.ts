@@ -1,10 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { Appointment } from '../../api';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { DataApiService } from 'src/app/services/data-api.service';
 @Component({
   selector: 'app-appointment-details',
   templateUrl: './appointment-details.component.html',
@@ -19,7 +20,9 @@ export class AppointmentDetailsComponent implements OnInit {
   constructor(
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private dataApiSrv: DataApiService,
+    private router: Router
   ) {}
   ngOnInit(): void {
     this.route.queryParams.subscribe((params: any) => {
@@ -29,25 +32,32 @@ export class AppointmentDetailsComponent implements OnInit {
   confirm1(event: Event) {
     this.confirmationService.confirm({
       target: event.target as EventTarget,
-      message: 'Are you sure that you want to proceed?',
+      message: 'Are you sure you want to cancel this appointment?',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
-      acceptIcon: 'none',
-      rejectIcon: 'none',
-      rejectButtonStyleClass: 'p-button-text',
-      accept: () => {
 
+      acceptLabel: 'Confirm',
+      rejectLabel: 'Cancel',
+
+      acceptButtonStyleClass: 'm-2',
+      rejectButtonStyleClass: 'm-2 p-button-danger',
+
+      accept: () => {
+        this.dataApiSrv.deleteById(+this.appointment.id);
         this.messageService.add({
-          severity: 'info',
+          severity: 'success',
           summary: 'Confirmed',
-          detail: 'You have accepted',
+          detail: 'Appointment canceled successfully.',
         });
+        setTimeout(() => {
+          this.router.navigate(['/']);
+        }, 1000);
       },
       reject: () => {
         this.messageService.add({
           severity: 'error',
           summary: 'Rejected',
-          detail: 'You have rejected',
+          detail: 'Appointment not canceled',
           life: 3000,
         });
       },

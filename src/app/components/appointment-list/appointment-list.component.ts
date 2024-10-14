@@ -1,11 +1,12 @@
-import { Component, Inject, inject, OnInit } from '@angular/core';
-import { Appointment, AppointmentList } from '../../api';
+import { Component, Inject, inject, OnInit, signal } from '@angular/core';
+import { Appointment } from '../../api';
 import { DialogModule } from 'primeng/dialog';
 import { RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { DataApiService } from 'src/app/services/data-api.service';
 @Component({
   selector: 'app-appointment-list',
   templateUrl: './appointment-list.component.html',
@@ -22,38 +23,46 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 })
 export class AppointmentListComponent implements OnInit {
   displayCancelDialog = false;
+  clickedId: number | null = null;
   constructor(
     private confirmationService: ConfirmationService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private data: DataApiService
   ) {}
 
-  appointments: Appointment[] = [];
-  appointmentToCancel: number | null = null;
+  appointments = signal<Appointment[]>([]);
+  appointmentToCancel!: number;
   // constructor() {}
   ngOnInit(): void {
-    this.appointments = AppointmentList;
+    this.appointments.set(this.data.getData()());
   }
   confirm1(event: Event) {
     this.confirmationService.confirm({
       target: event.target as EventTarget,
-      message: 'Are you sure that you want to proceed?',
+      message: 'Are you sure you want to cancel this appointment?',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
-      acceptIcon: 'none',
-      rejectIcon: 'none',
-      rejectButtonStyleClass: 'p-button-text',
+      acceptLabel: 'Confirm',
+      rejectLabel: 'Cancel',
+
+      acceptButtonStyleClass: 'm-2',
+      rejectButtonStyleClass: 'm-2 p-button-danger',
       accept: () => {
+        console.log(this.clickedId);
+
+        this.data.deleteById(this.clickedId as number);
+        this.appointments.set(this.data.getData()());
         this.messageService.add({
-          severity: 'info',
+          severity: 'success',
           summary: 'Confirmed',
-          detail: 'You have accepted',
+          detail: 'Appointment canceled successfully.',
         });
       },
       reject: () => {
         this.messageService.add({
           severity: 'error',
           summary: 'Rejected',
-          detail: 'You have rejected',
+          detail: 'Appointment not canceled',
           life: 3000,
         });
       },
